@@ -12,35 +12,78 @@
 
 <title>Army Rush</title>
 
-<style>
 
 *{box-sizing:border-box}
-
-body{margin:0;overflow:hidden;background:#18251d;font-family:Arial;color:white;touch-action:none}
-
+body{
+ margin:0;overflow:hidden;background:#111820;
+ font-family:Arial,sans-serif;color:#f4f5f7;
+ touch-action:none
+}
 #game{position:fixed;inset:0}
+#ui{
+ position:fixed;inset:0;pointer-events:none;
+ padding:env(safe-area-inset-top) 12px env(safe-area-inset-bottom)
+}
+.top{
+ display:flex;justify-content:space-between;gap:7px;
+ padding-top:10px
+}
+.panel{
+ background:rgba(17,24,32,.88);
+ border:1px solid rgba(255,255,255,.12);
+ border-radius:12px;padding:9px 12px;
+ font-size:13px;font-weight:700;
+ box-shadow:0 4px 15px #0003;
+ backdrop-filter:blur(10px)
+}
+.panel span{color:#e9b957}
+#controls{
+ position:absolute;bottom:20px;left:0;right:0;
+ display:flex;justify-content:space-between;
+ align-items:end;padding:0 12px;
+}
+#stick{
+ width:105px;height:105px;border-radius:50%;
+ background:rgba(20,28,37,.55);
+ border:1px solid #ffffff55;
+ pointer-events:auto;position:relative;
+ backdrop-filter:blur(8px)
+}
+#knob{
+ width:43px;height:43px;border-radius:50%;
+ background:linear-gradient(145deg,#d9dce0,#737d89);
+ border:2px solid #ffffff88;
+ position:absolute;left:30px;top:30px;
+ box-shadow:0 3px 10px #0006
+}
+.shop{
+ display:flex;flex-direction:column;gap:7px;
+ pointer-events:auto;width:126px
+}
+button{
+ border:1px solid #ffffff20;border-radius:10px;
+ padding:12px 8px;
+ background:linear-gradient(135deg,#303d4b,#1d2732);
+ color:#f5f5f5;font-weight:700;font-size:12px;
+ box-shadow:0 3px 10px #0005
+}
+button:active{transform:scale(.96);background:#455363}
+.shop button:first-child{
+ border-color:#d6a94d88;
+ background:linear-gradient(135deg,#a77b2c,#76551e);
+ color:white
+}
+#message{
+ position:absolute;top:45%;width:100%;
+ text-align:center;font-size:25px;font-weight:bold;
+ text-shadow:0 3px 10px #000
+}
+#hint{
+ position:absolute;bottom:139px;width:100%;
+ text-align:center;font-size:10px;
+ color:#ffffffa0;letter-spacing:.4px
+}
 
-#ui{position:fixed;inset:0;pointer-events:none}
-
-.top{display:flex;justify-content:space-between;padding:15px;gap:8px}
-
-.panel{background:#101b20dd;padding:10px 14px;border:1px solid #ffffff33;border-radius:12px;font-weight:bold}
-
-#controls{position:absolute;bottom:22px;left:0;right:0;display:flex;justify-content:space-between;align-items:end;padding:15px}
-
-#stick{width:115px;height:115px;border-radius:50%;background:#ffffff22;border:2px solid #ffffff66;pointer-events:auto;position:relative}
-
-#knob{width:48px;height:48px;background:#ffffff99;border-radius:50%;position:absolute;left:31px;top:31px}
-
-.shop{display:flex;flex-direction:column;gap:8px;pointer-events:auto}
-
-button{border:0;border-radius:10px;padding:12px 13px;background:#e0a52e;color:#1b1b1b;font-weight:bold;font-size:13px}
-
-#message{position:absolute;top:45%;width:100%;text-align:center;font-size:26px;font-weight:bold;text-shadow:0 2px 5px black}
-
-#hint{position:absolute;bottom:150px;width:100%;text-align:center;font-size:12px;color:#ddd}
-
-</style>
 
 </head>
 
