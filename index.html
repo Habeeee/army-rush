@@ -3,539 +3,466 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Last Defense</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Zombie Base</title>
 <style>
 *{box-sizing:border-box}
-html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#806b4b;font-family:Arial,sans-serif;touch-action:none}
+body{margin:0;overflow:hidden;background:#263b25;font-family:Arial,sans-serif;touch-action:none}
 canvas{display:block}
-#ui{position:fixed;inset:0;pointer-events:none;color:white}
-.panel{background:#101b1de8;border:1px solid #ffffff25;border-radius:12px;padding:9px 11px}
-.top{position:absolute;top:10px;left:10px;right:10px;display:flex;justify-content:space-between;gap:6px}
-.stat{font-size:10px;color:#aab8b4;letter-spacing:1px}
-.value{font-size:17px;font-weight:800;margin-top:4px}
-#health{position:absolute;top:69px;left:10px;width:175px}
-.bar{height:7px;background:#34423e;border-radius:8px;margin-top:7px;overflow:hidden}
-#healthFill{height:100%;width:100%;background:#50d38a}
-#waveBox{position:absolute;right:10px;top:69px}
-#objective{position:absolute;top:125px;left:12px;font-size:11px;text-shadow:0 2px 5px #000}
-#buttons{position:absolute;left:10px;bottom:18px;display:flex;flex-direction:column;gap:8px;pointer-events:auto}
-.action{width:100px;min-height:49px;background:#111e20ed;border:1px solid #ffffff35;color:white;border-radius:11px;padding:7px;font-size:10px;font-weight:bold;text-align:center}
-.action strong{display:block;font-size:14px;margin-top:3px}
-#joystick{position:absolute;width:120px;height:120px;left:50%;bottom:18px;transform:translateX(-50%);border-radius:50%;background:#dce8e326;border:2px solid #ffffff55;pointer-events:auto;touch-action:none}
-#stick{position:absolute;width:50px;height:50px;left:33px;top:33px;border-radius:50%;background:#dce8e3a8;border:2px solid #fff9;box-shadow:0 3px 12px #0007}
-#buyhint{position:absolute;left:50%;bottom:155px;transform:translateX(-50%);display:none;background:#101b1df2;border:1px solid #e7b84d;border-radius:12px;padding:10px 15px;text-align:center;font-size:12px;white-space:nowrap;pointer-events:auto}
-#buyhint strong{display:block;color:#f5ca65;margin-top:4px;font-size:14px}
-#toast{position:absolute;top:43%;left:50%;transform:translate(-50%,-50%);background:#101b1df2;padding:12px 18px;border-radius:12px;opacity:0;transition:opacity .2s;font-size:13px}
-#gameover{display:none;position:absolute;inset:0;background:#07100eef;align-items:center;justify-content:center;flex-direction:column;pointer-events:auto}
-#gameover button{padding:14px 25px;border:0;border-radius:10px;background:#e5b94e;font-weight:bold}
+#top{position:fixed;top:10px;left:10px;right:10px;display:flex;justify-content:space-between;gap:5px;z-index:5;pointer-events:none}
+.stat{background:#17251de8;color:white;padding:9px 12px;border:1px solid #71866b;border-radius:10px;font-size:13px;font-weight:bold}
+#health{position:fixed;top:55px;left:50%;transform:translateX(-50%);width:150px;height:10px;background:#462b28;border:1px solid #ddd;border-radius:8px;overflow:hidden;z-index:5}
+#healthFill{height:100%;width:100%;background:#42d65c}
+#wave{position:fixed;top:76px;left:50%;transform:translateX(-50%);color:white;background:#17251ddd;padding:7px 14px;border-radius:8px;font-weight:bold;font-size:13px;z-index:5}
+#buttons{position:fixed;left:10px;bottom:22px;display:flex;flex-direction:column;gap:9px;z-index:10}
+.action{width:94px;min-height:53px;border:1px solid #b5c69b;border-radius:12px;background:#253d2beF;color:white;font-weight:bold;font-size:12px;box-shadow:0 3px 8px #0008}
+.action span{display:block;color:#f5d36a;margin-top:4px}
+#joy{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);width:122px;height:122px;border-radius:50%;background:#17251d77;border:2px solid #d5e0ca88;z-index:10;touch-action:none}
+#stick{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:49px;height:49px;border-radius:50%;background:#dce8dccc;border:2px solid white;box-shadow:0 2px 8px #0008}
+#hint{position:fixed;left:50%;bottom:151px;transform:translateX(-50%);background:#17251de8;color:white;padding:9px 13px;border-radius:9px;font-size:12px;z-index:6;display:none;white-space:nowrap}
+#toast{position:fixed;left:50%;top:115px;transform:translateX(-50%);background:#17251dee;color:white;padding:10px 15px;border-radius:9px;z-index:20;display:none;font-size:13px}
+#gameover{position:fixed;inset:0;background:#000c;display:none;z-index:30;color:white;align-items:center;justify-content:center;flex-direction:column;text-align:center}
+#gameover button{padding:13px 24px;border-radius:10px;border:0;background:#5a9c42;color:white;font-weight:bold;margin-top:15px}
 @media(max-width:380px){
- #joystick{width:108px;height:108px}
- #stick{left:29px;top:29px;width:46px;height:46px}
- #buttons{left:7px;bottom:12px}
- .action{width:88px;min-height:45px}
+ .action{width:84px;min-height:49px;font-size:11px}
+ #joy{width:112px;height:112px}
+ #stick{width:45px;height:45px}
 }
 </style>
 </head>
 <body>
-<div id="ui">
- <div class="top">
-  <div class="panel"><div class="stat">МОНЕТЫ</div><div class="value">🪙 <span id="coins">150</span></div></div>
-  <div class="panel"><div class="stat">АРМИЯ</div><div class="value">⚔ <span id="army">1</span></div></div>
-  <div class="panel"><div class="stat">УБИЙСТВА</div><div class="value">☠ <span id="kills">0</span></div></div>
- </div>
- <div id="health" class="panel"><div class="stat">ЗДОРОВЬЕ БАЗЫ <b id="healthText" style="float:right;color:white">100%</b></div><div class="bar"><div id="healthFill"></div></div></div>
- <div id="waveBox" class="panel"><div class="stat">ВОЛНА</div><div class="value" id="wave">1</div></div>
- <div id="objective">Защищай территорию и развивай базу</div>
- <div id="buttons">
-  <button class="action" id="recruit">НАНЯТЬ СОЛДАТ<strong>🪖 100</strong></button>
-  <button class="action" id="repair">РЕМОНТ БАЗЫ<strong>🛠 75</strong></button>
- </div>
- <div id="joystick"><div id="stick"></div></div>
- <div id="buyhint">ПОСТРОИТЬ ЗДАНИЕ<strong id="buyText">🪙 200</strong></div>
- <div id="toast"></div>
- <div id="gameover"><h1>БАЗА УНИЧТОЖЕНА</h1><p>Твоя оборона пала</p><button onclick="location.reload()">ИГРАТЬ СНОВА</button></div>
+<div id="top">
+ <div class="stat">🪙 <span id="coins">500</span></div>
+ <div class="stat">🪖 <span id="army">1</span></div>
+ <div class="stat">☠ <span id="kills">0</span></div>
 </div>
+<div id="health"><div id="healthFill"></div></div>
+<div id="wave">ВОЛНА 1</div>
+<div id="buttons">
+ <button class="action" id="recruit">НАНЯТЬ<span>🪖 100 монет</span></button>
+ <button class="action" id="repair">РЕМОНТ<span>🔧 75 монет</span></button>
+</div>
+<div id="joy"><div id="stick"></div></div>
+<div id="hint">Нажми, чтобы построить</div>
+<div id="toast"></div>
+<div id="gameover"><h1>БАЗА УНИЧТОЖЕНА</h1><p>Зомби захватили территорию</p><button onclick="location.reload()">ЗАНОВО</button></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
-(()=>{
-const scene=new THREE.Scene();
-scene.background=new THREE.Color(0x8b947d);
-scene.fog=new THREE.Fog(0x8b947d,70,125);
-const camera=new THREE.PerspectiveCamera(48,innerWidth/innerHeight,.1,180);
-const renderer=new THREE.WebGLRenderer({antialias:true});
+(() => {
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x91b9cb);
+scene.fog = new THREE.Fog(0x91b9cb, 65, 125);
+
+const camera = new THREE.PerspectiveCamera(60, innerWidth/innerHeight, 0.1, 250);
+const renderer = new THREE.WebGLRenderer({antialias:true});
 renderer.setSize(innerWidth,innerHeight);
-renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));
-renderer.shadowMap.enabled=true;
+renderer.setPixelRatio(Math.min(devicePixelRatio,1.7));
+renderer.outputEncoding = THREE.sRGBEncoding;
+renderer.toneMapping = THREE.NoToneMapping;
 document.body.appendChild(renderer.domElement);
-scene.add(new THREE.HemisphereLight(0xe8f0df,0x56513c,2));
-const sun=new THREE.DirectionalLight(0xffedcf,2);
-sun.position.set(-25,45,20);sun.castShadow=true;
-sun.shadow.mapSize.set(1024,1024);scene.add(sun);
 
-const mat=c=>new THREE.MeshStandardMaterial({color:c,roughness:.95});
-const M={
-earth:mat(0x806343),earthLight:mat(0x927650),earthDark:mat(0x6e563a),
-grass:mat(0x527c38),grass2:mat(0x426b30),grass3:mat(0x739448),
-road:mat(0xa18a68),concrete:mat(0x777e79),blue:mat(0x354f62),
-blue2:mat(0x526d7d),skin:mat(0xc69a78),uniform:mat(0x4c6049),
-vest:mat(0x34463a),pants:mat(0x394a3a),boots:mat(0x252c29),
-metal:mat(0x343c3e),helmet:mat(0x344b3c),gun:mat(0x20282a),
-zskin:mat(0x87947b),zcloth:mat(0x4b5145),blood:mat(0x552d2a),
-yellow:mat(0xe5b74e),wood:mat(0x76563b),white:mat(0xd8d8c8)
+scene.add(new THREE.HemisphereLight(0xdff4ff,0x52613c,1.15));
+const sun = new THREE.DirectionalLight(0xffffff,1.1);
+sun.position.set(-25,45,20);
+scene.add(sun);
+
+const mat = (color,roughness=1) => new THREE.MeshStandardMaterial({color,roughness});
+const M = {
+ earth:mat(0x76502e),
+ earth2:mat(0x88613a),
+ grass:mat(0x438b32),
+ grass2:mat(0x62a83b),
+ road:mat(0xb69a69),
+ concrete:mat(0x777c76),
+ base:mat(0x9b9d91),
+ roof:mat(0x46514b),
+ soldier:mat(0x435c37),
+ vest:mat(0x303c2a),
+ skin:mat(0xc49a75),
+ zombie:mat(0x8eae50),
+ zombieDark:mat(0x394633),
+ red:mat(0xc52824),
+ black:mat(0x202321),
+ wood:mat(0x68482b),
+ white:mat(0xe5e4cf)
 };
-function box(p,w,h,d,m,x,y,z){
- const o=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),m);
- o.position.set(x,y,z);o.castShadow=true;o.receiveShadow=true;p.add(o);return o;
+
+function box(w,h,d,material,x,y,z,parent=scene){
+ const o=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),material);
+ o.position.set(x,y,z);o.castShadow=true;o.receiveShadow=true;parent.add(o);return o;
 }
-function sphere(p,x,y,z,sx,sy,sz,m){
- const o=new THREE.Mesh(new THREE.SphereGeometry(1,10,8),m);
- o.position.set(x,y,z);o.scale.set(sx,sy,sz);o.castShadow=true;p.add(o);return o;
+function cylinder(rt,rb,h,material,x,y,z,parent=scene){
+ const o=new THREE.Mesh(new THREE.CylinderGeometry(rt,rb,h,9),material);
+ o.position.set(x,y,z);o.castShadow=true;parent.add(o);return o;
 }
-function cyl(p,rt,rb,h,m,x,y,z,n=10){
- const o=new THREE.Mesh(new THREE.CylinderGeometry(rt,rb,h,n),m);
- o.position.set(x,y,z);o.castShadow=true;p.add(o);return o;
+function sphere(r,material,x,y,z,parent=scene){
+ const o=new THREE.Mesh(new THREE.SphereGeometry(r,10,8),material);
+ o.position.set(x,y,z);o.castShadow=true;parent.add(o);return o;
 }
 
-// ЗЕМЛЯ И ТЕРРИТОРИЯ
-function makeGround(){
- // Основная поверхность — земля коричневого цвета
- const ground=new THREE.Mesh(new THREE.PlaneGeometry(180,180),M.earth);
- ground.rotation.x=-Math.PI/2;ground.position.y=-.14;ground.receiveShadow=true;scene.add(ground);
+// GROUND: brown soil, not a white plane
+const ground = new THREE.Mesh(new THREE.PlaneGeometry(180,180),M.earth);
+ground.rotation.x=-Math.PI/2;ground.position.y=-0.12;ground.receiveShadow=true;scene.add(ground);
 
- // Центральная территория базы — более светлая утрамбованная земля
- const area=new THREE.Mesh(new THREE.CircleGeometry(45,80),M.earthLight);
- area.rotation.x=-Math.PI/2;area.position.y=-.12;scene.add(area);
+// Lighter soil patches
+for(let i=0;i<45;i++){
+ const x=(Math.random()-.5)*85,z=(Math.random()-.5)*85;
+ const patch=new THREE.Mesh(new THREE.CircleGeometry(1.1+Math.random()*2.5,9),M.earth2);
+ patch.rotation.x=-Math.PI/2;patch.position.set(x,-.095,z);patch.scale.set(1,.55+Math.random()*.5,1);scene.add(patch);
+}
 
- // Отдельные земляные пятна
- for(let i=0;i<280;i++){
-  const a=Math.random()*Math.PI*2,r=Math.sqrt(Math.random())*43;
-  const x=Math.cos(a)*r,z=Math.sin(a)*r;
-  const patch=new THREE.Mesh(new THREE.CircleGeometry(.3+Math.random()*.9,7),
-    Math.random()>.5?M.earth:M.earthDark);
-  patch.rotation.x=-Math.PI/2;patch.position.set(x,-.105,z);scene.add(patch);
+// Green grass tufts scattered across the territory
+for(let i=0;i<1250;i++){
+ const x=(Math.random()-.5)*88,z=(Math.random()-.5)*88;
+ if(Math.hypot(x,z)<7)continue;
+ const g=new THREE.Group();
+ for(let j=0;j<3;j++){
+  const blade=new THREE.Mesh(new THREE.ConeGeometry(.075,.42,4),Math.random()>.5?M.grass:M.grass2);
+  blade.position.set((Math.random()-.5)*.22,.2,0);
+  blade.rotation.z=(Math.random()-.5)*.55;
+  g.add(blade);
  }
-
- // Дороги
- const road=new THREE.Mesh(new THREE.PlaneGeometry(8,82),M.road);
- road.rotation.x=-Math.PI/2;road.position.set(0,-.075,-3);scene.add(road);
- const cross=new THREE.Mesh(new THREE.PlaneGeometry(65,5),M.road);
- cross.rotation.x=-Math.PI/2;cross.position.set(0,-.07,-5);scene.add(cross);
-
- // Трава — только зелёные пучки, отдельные от земли
- const geo=new THREE.ConeGeometry(.055,.48,3);
- geo.translate(0,.24,0);
- const groups=[M.grass,M.grass2,M.grass3];
- const count=3000,instances=groups.map(m=>new THREE.InstancedMesh(geo,m,count));
- const counts=[0,0,0],dummy=new THREE.Object3D();
- for(let i=0;i<count;i++){
-  const x=(Math.random()-.5)*86,z=(Math.random()-.5)*86;
-  if(Math.hypot(x,z)>43)continue;
-  // Свободные дорожки и площадка вокруг базы
-  if(Math.abs(x)<5&&z<8&&z>-45)continue;
-  if(Math.abs(z+5)<3&&Math.abs(x)<34)continue;
-  const k=Math.floor(Math.random()*3),j=counts[k]++;
-  dummy.position.set(x,-.09,z);
-  dummy.rotation.set((Math.random()-.5)*.15,Math.random()*6.28,(Math.random()-.5)*.15);
-  const s=.7+Math.random()*1.1;dummy.scale.set(s,s,s);
-  dummy.updateMatrix();instances[k].setMatrixAt(j,dummy.matrix);
- }
- instances.forEach((o,i)=>{o.count=counts[i];o.instanceMatrix.needsUpdate=true;scene.add(o)});
-
- // Лес — только за пределами территории
- for(let i=0;i<100;i++){
-  const a=Math.random()*Math.PI*2,r=52+Math.random()*23;
-  const x=Math.cos(a)*r,z=Math.sin(a)*r;
-  cyl(scene,.15,.23,1.4,M.wood,x,.7,z,7);
-  sphere(scene,x,2.1,z,1.1,1.5,1.1,mat(0x405c3e));
- }
-}
-makeGround();
-
-// БАЗА
-const base=new THREE.Group();scene.add(base);
-box(base,8,.6,7,M.concrete,0,.3,0);
-box(base,6,2.7,5,M.blue,0,1.9,0);
-box(base,6.3,.22,5.3,M.blue2,0,3.28,0);
-box(base,2.2,1.5,1.5,M.concrete,0,4.1,-.6);
-box(base,1.3,.4,1.3,M.metal,0,5,-.6);
-box(base,2.5,1.1,.15,M.metal,0,1.4,2.57);
-
-// ЧЕЛОВЕЧЕСКИЕ МОДЕЛИ
-function human(zombie=false){
- const root=new THREE.Group(),body=new THREE.Group();root.add(body);
- const skin=zombie?M.zskin:M.skin,shirt=zombie?M.zcloth:M.uniform,pants=zombie?M.zcloth:M.pants;
- cyl(body,.25,.31,.34,pants,0,.78,0);
- cyl(body,.34,.27,.67,shirt,0,1.25,0);
- sphere(body,0,1.48,0,.34,.25,.23,shirt);
- cyl(body,.105,.12,.17,skin,0,1.68,0);
- sphere(body,0,1.91,0,.18,.22,.17,skin);
- if(zombie){
-  sphere(body,0,2.08,0,.19,.09,.18,M.zcloth);
-  sphere(body,-.075,1.94,.15,.035,.035,.025,M.blood);
-  sphere(body,.075,1.94,.15,.035,.035,.025,M.blood);
-  for(let i=0;i<3;i++){
-   const tear=box(body,.12,.38,.035,M.zcloth,-.19+i*.18,1.03,.21);
-   tear.rotation.z=(i-1)*.3;
-  }
- }else{
-  sphere(body,0,2.08,0,.205,.12,.19,M.helmet);
-  box(body,.27,.045,.08,M.helmet,0,2.01,.14);
-  box(body,.48,.48,.31,M.vest,0,1.27,.015);
-  for(const x of [-.15,.15])box(body,.1,.17,.04,M.blue2,x,1.28,.18);
-  box(body,.34,.42,.18,M.uniform,0,1.34,-.23);
- }
- const arms=[],legs=[];
- for(const s of [-1,1]){
-  sphere(body,s*.34,1.48,0,.14,.15,.14,shirt);
-  const arm=new THREE.Group();arm.position.set(s*.37,1.43,0);body.add(arm);
-  cyl(arm,.09,.13,.43,shirt,0,-.21,0);
-  cyl(arm,.065,.095,.37,skin,0,-.6,.01);
-  sphere(arm,0,-.78,.02,.08,.09,.08,skin);arms.push(arm);
-  const leg=new THREE.Group();leg.position.set(s*.17,.72,0);body.add(leg);
-  cyl(leg,.13,.16,.42,pants,0,-.21,0);
-  sphere(leg,0,-.4,0,.105,.11,.105,pants);
-  cyl(leg,.075,.105,.43,pants,0,-.64,0);
-  box(leg,.16,.13,.31,M.boots,0,-.88,.075);legs.push(leg);
- }
- if(!zombie){
-  const rifle=new THREE.Group();body.add(rifle);
-  box(rifle,.09,.11,.66,M.gun,0,1.37,.37);
-  box(rifle,.07,.07,.25,M.metal,0,1.42,.75);
-  box(rifle,.07,.23,.1,M.gun,0,1.22,.25);
- }else body.rotation.x=-.12;
- root.userData={body,arms,legs,zombie,phase:Math.random()*6};
- return root;
-}
-function animatePerson(g,t,walking){
- const u=g.userData,s=walking?Math.sin(t*9)*.42:0;
- u.legs[0].rotation.x=s;u.legs[1].rotation.x=-s;
- u.arms[0].rotation.x=-s*.5;u.arms[1].rotation.x=s*.5;
- if(u.zombie)u.body.rotation.z=Math.sin(t*2+u.phase)*.08;
+ g.position.set(x,0,z);scene.add(g);
 }
 
-let coins=150,kills=0,wave=1,baseHealth=100,damage=1,ended=false;
-let zombies=[],soldiers=[],bullets=[],buildings=[];
-let nearby=null,spawnLeft=0,spawnTimer=0,nextWave=0;
-const player=new THREE.Group();scene.add(player);
-const playerModel=human(false);player.add(playerModel);
-const playerData={shoot:0};
+// Roads
+function road(w,d,x,z){
+ const r=new THREE.Mesh(new THREE.PlaneGeometry(w,d),M.road);
+ r.rotation.x=-Math.PI/2;r.position.set(x,-.07,z);scene.add(r);
+}
+road(8,78,0,0);
+road(78,7,0,0);
+road(6,22,0,30);
 
-// Препятствия: главная база и незакупленные здания тоже блокируют путь
-const obstacles=[
- {x:0,z:0,r:5.0},
- {x:-12,z:1,r:2.8},{x:12,z:-2,r:2.1},
- {x:-12,z:-13,r:2.7},{x:12,z:-14,r:2.7}
+// Forest only outside the base territory
+for(let i=0;i<160;i++){
+ const a=Math.random()*Math.PI*2;
+ const radius=53+Math.random()*22;
+ const x=Math.cos(a)*radius,z=Math.sin(a)*radius;
+ cylinder(.18,.25,2.4,M.wood,x,1.2,z);
+ const crown=sphere(1.5+Math.random(),M.grass,x,3,z);
+ crown.scale.y=1.25;
+}
+
+// Main base
+const baseGroup=new THREE.Group();scene.add(baseGroup);
+box(9,3.4,8,M.base,0,1.7,0,baseGroup);
+box(9.5,.5,8.5,M.roof,0,3.65,0,baseGroup);
+box(2.2,2.2,.15,M.black,0,1.2,4.08,baseGroup);
+box(1.3,.3,.2,M.white,0,3.95,4.2,baseGroup);
+box(1.2,.6,.3,M.red,0,4.3,4.2,baseGroup);
+
+// Barriers around base
+for(let i=-1;i<=1;i++){
+ box(1.7,.8,.45,M.concrete,i*3, .4,5.7);
+ box(1.7,.8,.45,M.concrete,i*3, .4,-5.7);
+}
+
+// Buildings
+const buildings=[
+ {name:"Казармы",x:-13,z:2,cost:200,type:"barracks"},
+ {name:"Башня",x:13,z:2,cost:250,type:"tower"},
+ {name:"Арсенал",x:-13,z:-13,cost:300,type:"arsenal"},
+ {name:"Госпиталь",x:13,z:-13,cost:275,type:"hospital"}
 ];
+const obstacles=[{x:0,z:0,r:5.7}];
+const buildingMeshes=[];
+
+buildings.forEach(b=>{
+ const g=new THREE.Group();g.position.set(b.x,0,b.z);scene.add(g);
+ // Building is visible even before purchase
+ box(5,2.7,5,M.concrete,0,1.35,0,g);
+ box(5.3,.45,5.3,M.roof,0,2.9,0,g);
+ box(1.3,1.7,.15,M.black,0,.9,2.56,g);
+ box(1.1,.25,.2,M.white,0,2.1,2.65,g);
+ const pad=new THREE.Mesh(new THREE.CylinderGeometry(3.2,3.2,.15,24),mat(0x9b8248));
+ pad.position.set(0,.02,0);g.add(pad);
+ const marker=box(2.7,.16,.3,mat(0xf1cf65),0,3.6,3.1,g);
+ const price=box(1.5,.15,.15,mat(0x3b9a4c),0,3.9,3.1,g);
+ obstacles.push({x:b.x,z:b.z,r:3.6});
+ buildingMeshes.push({data:b,group:g,built:false});
+});
+
+// Human character models
+function makeHuman(isZombie=false){
+ const g=new THREE.Group();
+ const bodyMat=isZombie?M.zombie:M.soldier;
+ const clothes=isZombie?M.zombieDark:M.vest;
+ // legs
+ for(const side of [-1,1]){
+  const leg=cylinder(.22,.17,.9,clothes,side*.25,.55,0,g);
+  leg.rotation.z=side*.08;
+  box(.3,.18,.48,M.black,side*.25,.12,.12,g);
+ }
+ // body and vest
+ cylinder(.42,.3,1.05,bodyMat,0,1.45,0,g);
+ box(.68,.72,.35,clothes,0,1.55,.25,g);
+ // arms
+ for(const side of [-1,1]){
+  const arm=cylinder(.14,.12,.8,bodyMat,side*.53,1.5,0,g);
+  arm.rotation.z=side*.35;
+ }
+ // head
+ sphere(.34,isZombie?M.zombie:M.skin,0,2.25,0,g);
+ if(isZombie){
+  sphere(.075,M.red,-.13,2.3,.29,g);
+  sphere(.075,M.red,.13,2.3,.29,g);
+  box(.25,.09,.06,M.black,0,2.05,.31,g);
+ }else{
+  sphere(.37,M.soldier,0,2.52,0,g);
+  box(.5,.12,.48,M.soldier,0,2.43,0,g);
+  // rifle
+  box(.12,.12,1.15,M.black,.45,1.55,.48,g);
+  box(.1,.1,.35,M.wood,.45,1.55,.9,g);
+ }
+ return g;
+}
+
+const player=new THREE.Group();
+player.add(makeHuman(false));
+player.position.set(0,0,15);
+scene.add(player);
+
+const soldiers=[];
+const zombies=[];
+const bullets=[];
+let coins=500, kills=0, army=1, baseHealth=100, wave=1;
+let builtCount=0;
+let lastShot=0, spawnTimer=0, toastTimer=0;
+const $=id=>document.getElementById(id);
+
+function updateUI(){
+ $("coins").textContent=coins;
+ $("army").textContent=army;
+ $("kills").textContent=kills;
+ $("healthFill").style.width=baseHealth+"%";
+ $("wave").textContent="ВОЛНА "+wave;
+}
+function notify(t){
+ $("toast").textContent=t;$("toast").style.display="block";
+ clearTimeout(toastTimer);toastTimer=setTimeout(()=>$("toast").style.display="none",1800);
+}
+
 function collides(x,z,r){
  for(const o of obstacles){
-  if(Math.hypot(x-o.x,z-o.z)<r+o.r)return true;
+  if(Math.hypot(x-o.x,z-o.z)<o.r+r)return true;
  }
  return false;
 }
 function moveWithCollision(obj,dx,dz,r){
- const nx=obj.position.x+dx,nz=obj.position.z+dz;
- // Проверяем каждую ось отдельно, чтобы можно было скользить вдоль стен
+ let nx=obj.position.x+dx,nz=obj.position.z+dz;
  if(!collides(nx,obj.position.z,r))obj.position.x=nx;
  if(!collides(obj.position.x,nz,r))obj.position.z=nz;
 }
 
-// ВАЖНО: игрок появляется на открытом поле, далеко от базы и построек
-player.position.set(0,0,13);
-if(collides(player.position.x,player.position.z,.65)){
- player.position.set(7,0,13);
+// Spawn first zombies in front of the player so they are visible immediately
+function spawnZombie(x,z){
+ const g=new THREE.Group();
+ g.add(makeHuman(true));
+ g.position.set(x,0,z);
+ scene.add(g);
+ zombies.push({mesh:g,hp:3,speed:1.15+Math.random()*.35,attack:0});
+}
+for(let i=0;i<6;i++){
+ spawnZombie((Math.random()-.5)*13,-1-Math.random()*12);
 }
 
-// ПОСТРОЙКИ
-function label(text){
- const c=document.createElement('canvas');c.width=256;c.height=96;
- const ctx=c.getContext('2d');
- ctx.fillStyle='#111d1dee';ctx.fillRect(4,4,248,88);
- ctx.strokeStyle='#e5bd59';ctx.lineWidth=5;ctx.strokeRect(5,5,246,86);
- ctx.fillStyle='#f5cf6c';ctx.font='bold 32px Arial';ctx.textAlign='center';
- ctx.fillText(text,128,57);
- const s=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(c),transparent:true}));
- s.scale.set(3.3,1.25,1);return s;
-}
-function building(type,x,z,cost){
- const g=new THREE.Group();g.position.set(x,0,z);scene.add(g);
- const ghost=new THREE.Group();g.add(ghost);
- const gm=new THREE.MeshStandardMaterial({color:0x9ba8a0,transparent:true,opacity:.55});
- if(type==='КАЗАРМЫ'){
-  box(ghost,4,2.4,3,gm,0,1.2,0);box(ghost,4.2,.2,3.2,M.concrete,0,2.45,0);
- }else if(type==='БАШНЯ'){
-  cyl(ghost,.8,1.2,3,gm,0,1.5,0,8);box(ghost,1.8,.45,1.8,M.concrete,0,3.15,0);
- }else{
-  box(ghost,3.5,2.1,3,gm,0,1.05,0);box(ghost,3.7,.2,3.2,M.concrete,0,2.15,0);
- }
- const pad=new THREE.Mesh(new THREE.CylinderGeometry(2.25,2.25,.13,32),M.metal);
- pad.position.y=.04;g.add(pad);
- const ring=new THREE.Mesh(new THREE.TorusGeometry(2.12,.055,6,40),M.yellow);
- ring.rotation.x=Math.PI/2;ring.position.y=.13;g.add(ring);
- const tag=label('🪙 '+cost);tag.position.set(0,3.8,0);g.add(tag);
- buildings.push({type,x,z,cost,g,ghost,tag,built:false});
-}
-building('КАЗАРМЫ',-12,1,200);
-building('БАШНЯ',12,-2,250);
-building('АРСЕНАЛ',-12,-13,300);
-building('ГОСПИТАЛЬ',12,-14,275);
-
-function soldier(x,z){
- const g=human(false);g.position.set(x,0,z);scene.add(g);
- const s={group:g,shoot:Math.random()};soldiers.push(s);updateUI();return s;
-}
-function zombie(x,z){
- const g=human(true);g.position.set(x,0,z);
- zombies.push({group:g,hp:2+Math.floor(wave*.35),speed:1.05+Math.random()*.25,attack:0});
-}
-function toast(msg){
- const el=document.getElementById('toast');el.textContent=msg;el.style.opacity=1;
- clearTimeout(toast.timer);toast.timer=setTimeout(()=>el.style.opacity=0,1500);
-}
-function updateUI(){
- document.getElementById('coins').textContent=coins;
- document.getElementById('army').textContent=soldiers.length+1;
- document.getElementById('kills').textContent=kills;
- document.getElementById('wave').textContent=wave;
- document.getElementById('healthText').textContent=Math.max(0,Math.round(baseHealth))+'%';
- document.getElementById('healthFill').style.width=Math.max(0,baseHealth)+'%';
-}
-function construct(b){
- b.built=true;b.ghost.visible=false;b.tag.visible=false;
- if(b.type==='КАЗАРМЫ'){
-  box(b.g,4,2.4,3,M.blue,0,1.2,0);
-  box(b.g,4.2,.2,3.2,M.blue2,0,2.45,0);
-  for(let i=0;i<3;i++)soldier(-1+i,5);
-  toast('Казармы построены! +3 солдата');
- }else if(b.type==='БАШНЯ'){
-  cyl(b.g,.85,1.15,3,M.blue,0,1.5,0,8);
-  box(b.g,1.8,.4,1.8,M.concrete,0,3.1,0);
-  box(b.g,.18,.18,2.2,M.gun,0,3.3,.65);toast('Башня построена!');
- }else if(b.type==='АРСЕНАЛ'){
-  box(b.g,3.5,2.2,3,M.blue,0,1.1,0);
-  damage++;toast('Арсенал построен! Урон увеличен');
- }else{
-  box(b.g,3.5,2,3,M.blue,0,1,0);
-  baseHealth=Math.min(100,baseHealth+25);toast('Госпиталь построен!');
+function spawnWave(){
+ wave++;
+ const count=5+wave*2;
+ for(let i=0;i<count;i++){
+  const angle=Math.random()*Math.PI*2;
+  const distance=20+Math.random()*8;
+  spawnZombie(player.position.x+Math.cos(angle)*distance,player.position.z+Math.sin(angle)*distance);
  }
  updateUI();
-}
-function tryBuild(){
- if(!nearby)return;
- if(coins<nearby.cost){toast('Не хватает монет');return;}
- coins-=nearby.cost;construct(nearby);updateUI();
-}
-document.getElementById('buyhint').addEventListener('pointerdown',e=>{e.stopPropagation();tryBuild();});
-document.getElementById('recruit').onclick=()=>{
- if(coins<100)return toast('Не хватает монет');
- coins-=100;soldier(player.position.x-1,player.position.z+1);updateUI();toast('Солдат нанят');
-};
-document.getElementById('repair').onclick=()=>{
- if(coins<75)return toast('Не хватает монет');
- if(baseHealth>=100)return toast('База уже здорова');
- coins-=75;baseHealth=Math.min(100,baseHealth+25);updateUI();
-};
-
-function shoot(from,to,power){
- const dir=new THREE.Vector3().subVectors(to,from).normalize();
- const mesh=new THREE.Mesh(new THREE.SphereGeometry(.085,8,8),M.yellow);
- mesh.position.copy(from);scene.add(mesh);bullets.push({mesh,dir,life:2,power});
-}
-function nearest(pos,max){
- let best=null,dmax=max;
- for(const z of zombies){
-  const d=pos.distanceTo(z.group.position);
-  if(d<dmax){best=z;dmax=d;}
- }
- return best;
-}
-function kill(z){
- scene.remove(z.group);zombies=zombies.filter(a=>a!==z);
- kills++;coins+=12;if(Math.random()<.13)coins+=10;updateUI();
-}
-function zombieDirection(z){
- const p=z.group.position;
- let dx=-p.x,dz=-p.z,len=Math.hypot(dx,dz)||1;dx/=len;dz/=len;
- if(collides(p.x+dx*2,p.z+dz*2,.6)){
-  const options=[[-dz,dx],[dz,-dx],[dx,-dz],[-dx,dz]];
-  let found=false;
-  for(const v of options){
-   if(!collides(p.x+v[0]*2,p.z+v[1]*2,.6)){dx=v[0];dz=v[1];found=true;break;}
-  }
-  if(!found){dx=0;dz=0;}
- }
- return {x:dx,z:dz};
-}
-function gameOver(){
- ended=true;document.getElementById('gameover').style.display='flex';
+ notify("НАЧАЛАСЬ ВОЛНА "+wave);
 }
 
-// ДЖОЙСТИК — СТРОГО СНИЗУ ПО ЦЕНТРУ
-const joyEl=document.getElementById('joystick'),stick=document.getElementById('stick');
-let joy={x:0,y:0,active:false,id:null};
+function shoot(from,target){
+ const start=new THREE.Vector3(from.x,1.6,from.z);
+ const end=new THREE.Vector3(target.position.x,1.5,target.position.z);
+ const dir=end.sub(start).normalize();
+ const mesh=new THREE.Mesh(new THREE.SphereGeometry(.11,6,6),mat(0xffdf6b));
+ mesh.position.copy(start);scene.add(mesh);
+ bullets.push({mesh,dir,life:1.2,damage:1});
+}
+
+function recruit(){
+ if(coins<100){notify("Недостаточно монет");return}
+ coins-=100;army++;
+ const s=new THREE.Group();s.add(makeHuman(false));scene.add(s);
+ soldiers.push({mesh:s,angle:Math.random()*Math.PI*2});
+ updateUI();notify("Солдат нанят");
+}
+$("recruit").addEventListener("click",recruit);
+
+$("repair").addEventListener("click",()=>{
+ if(coins<75){notify("Недостаточно монет");return}
+ if(baseHealth>=100){notify("База уже цела");return}
+ coins-=75;baseHealth=Math.min(100,baseHealth+25);
+ updateUI();notify("База отремонтирована");
+});
+
+function buildNearby(){
+ let nearest=null,dist=999;
+ for(const b of buildingMeshes){
+  const d=Math.hypot(player.position.x-b.data.x,player.position.z-b.data.z);
+  if(!b.built&&d<6&&d<dist){nearest=b;dist=d}
+ }
+ if(nearest){
+  $("hint").style.display="block";
+  $("hint").textContent=nearest.data.name+" — "+nearest.data.cost+" монет · нажми";
+  $("hint").onclick=()=>{
+   if(coins<nearest.data.cost){notify("Недостаточно монет");return}
+   coins-=nearest.data.cost;nearest.built=true;builtCount++;
+   nearest.group.children.forEach(o=>{if(o.material&&o.material.color)o.material.color.setHex(0x718d57)});
+   if(nearest.data.type==="barracks"){
+    for(let i=0;i<3;i++){
+     const s=new THREE.Group();s.add(makeHuman(false));scene.add(s);
+     s.position.set(-13+(i-1)*1.3,0,7);
+     soldiers.push({mesh:s,angle:Math.random()*Math.PI*2});
+     army++;
+    }
+   }
+   if(nearest.data.type==="arsenal")notify("Арсенал построен: урон увеличен");
+   else notify(nearest.data.name+" построены!");
+   updateUI();$("hint").style.display="none";
+  };
+ }else $("hint").style.display="none";
+}
+
+// Joystick
+const joy=$("joy"),stick=$("stick");
+let joyX=0,joyY=0,joyActive=false,joyPointer=null;
 function setJoy(e){
- const r=joyEl.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;
- let x=e.clientX-cx,y=e.clientY-cy,max=r.width*.34,l=Math.hypot(x,y);
- if(l>max){x=x/l*max;y=y/l*max;}
- joy.x=x/max;joy.y=y/max;
- stick.style.transform=`translate(${x}px,${y}px)`;
+ const r=joy.getBoundingClientRect();
+ let dx=e.clientX-(r.left+r.width/2),dy=e.clientY-(r.top+r.height/2);
+ const max=r.width*.34;
+ const len=Math.hypot(dx,dy);
+ if(len>max){dx=dx/len*max;dy=dy/len*max}
+ joyX=dx/max;joyY=dy/max;
+ stick.style.left=`calc(50% + ${dx}px)`;
+ stick.style.top=`calc(50% + ${dy}px)`;
 }
-joyEl.addEventListener('pointerdown',e=>{
- e.preventDefault();joy.active=true;joy.id=e.pointerId;
- joyEl.setPointerCapture(e.pointerId);setJoy(e);
+joy.addEventListener("pointerdown",e=>{
+ joyActive=true;joyPointer=e.pointerId;joy.setPointerCapture(e.pointerId);setJoy(e);
 });
-joyEl.addEventListener('pointermove',e=>{
- if(joy.active&&joy.id===e.pointerId)setJoy(e);
-});
-function release(e){
- if(e.pointerId!==joy.id)return;
- joy.active=false;joy.x=0;joy.y=0;joy.id=null;
- stick.style.transform='translate(0,0)';
+joy.addEventListener("pointermove",e=>{if(joyActive&&e.pointerId===joyPointer)setJoy(e)});
+function releaseJoy(){
+ joyActive=false;joyPointer=null;joyX=0;joyY=0;
+ stick.style.left="50%";stick.style.top="50%";
 }
-joyEl.addEventListener('pointerup',release);
-joyEl.addEventListener('pointercancel',release);
+joy.addEventListener("pointerup",releaseJoy);
+joy.addEventListener("pointercancel",releaseJoy);
 
-const clock=new THREE.Clock();
-function update(dt,t){
- if(ended)return;
- // Движение игрока с проверкой препятствий
- const moving=Math.hypot(joy.x,joy.y)>.08;
- if(moving){
-  const l=Math.hypot(joy.x,joy.y),dx=joy.x/l,dz=joy.y/l;
-  moveWithCollision(player,dx*7*dt,dz*7*dt,.6);
-  playerModel.rotation.y=Math.atan2(dx,dz);
+// Camera starts looking at the player and follows him
+camera.position.set(0,13,27);
+camera.lookAt(player.position.x,1,player.position.z);
+
+let previous=performance.now();
+function animate(now){
+ requestAnimationFrame(animate);
+ const dt=Math.min((now-previous)/1000,.04);previous=now;
+
+ // Player movement
+ const speed=7;
+ const dx=joyX*speed*dt;
+ const dz=joyY*speed*dt;
+ if(Math.abs(dx)+Math.abs(dz)>.001){
+  moveWithCollision(player,dx,dz,.65);
+  player.rotation.y=Math.atan2(dx,dz);
  }
- animatePerson(playerModel,t,moving);
 
- // Камера следует за игроком
- camera.position.lerp(new THREE.Vector3(player.position.x,34,player.position.z+17),.09);
- camera.lookAt(player.position.x,0,player.position.z-2);
+ // Camera follows player smoothly
+ const desired=new THREE.Vector3(player.position.x,13,player.position.z+25);
+ camera.position.lerp(desired,.075);
+ camera.lookAt(player.position.x,1.1,player.position.z-2);
 
- // Солдаты
+ // Soldiers follow player and fire automatically
  soldiers.forEach((s,i)=>{
-  const a=i/Math.max(1,soldiers.length)*Math.PI*2;
-  const tx=player.position.x+Math.cos(a)*2.4,tz=player.position.z+Math.sin(a)*2.4+1;
-  let dx=tx-s.group.position.x,dz=tz-s.group.position.z;
-  const len=Math.hypot(dx,dz),walking=len>.5;
-  if(walking){
-   dx/=len;dz/=len;
-   moveWithCollision(s.group,dx*4*dt,dz*4*dt,.45);
-  }
-  const target=nearest(s.group.position,24);
-  if(target){
-   s.group.lookAt(target.group.position.x,0,target.group.position.z);
-   s.shoot-=dt;
-   if(s.shoot<=0){
-    shoot(s.group.position.clone().add(new THREE.Vector3(0,1.4,0)),
-    target.group.position.clone().add(new THREE.Vector3(0,1,0)),damage);
-    s.shoot=.85;
-   }
-  }
-  animatePerson(s.group,t,walking);
+  const a=now*.0005+i*2.4;
+  const tx=player.position.x+Math.cos(a)*3.2;
+  const tz=player.position.z+Math.sin(a)*3.2;
+  const vx=tx-s.mesh.position.x,vz=tz-s.mesh.position.z;
+  const len=Math.hypot(vx,vz);
+  if(len>1.2)moveWithCollision(s.mesh,vx/len*2.5*dt,vz/len*2.5*dt,.45);
  });
 
- // Автоматическая стрельба игрока
- const target=nearest(player.position,30);
- if(target){
-  playerData.shoot-=dt;
-  if(playerData.shoot<=0){
-   shoot(player.position.clone().add(new THREE.Vector3(0,1.4,0)),
-   target.group.position.clone().add(new THREE.Vector3(0,1,0)),damage);
-   playerData.shoot=.5;
-  }
- }
-
- // Башни
- buildings.forEach(b=>{
-  if(b.built&&b.type==='БАШНЯ'){
-   b.cool=(b.cool||0)-dt;
-   const z=nearest(b.g.position,27);
-   if(z&&b.cool<=0){
-    shoot(b.g.position.clone().add(new THREE.Vector3(0,3.5,0)),
-    z.group.position.clone().add(new THREE.Vector3(0,1,0)),damage+1);
-    b.cool=1;
+ // Zombies chase player, avoiding buildings where possible
+ zombies.forEach((z,i)=>{
+  const dx=player.position.x-z.mesh.position.x;
+  const dz=player.position.z-z.mesh.position.z;
+  const len=Math.hypot(dx,dz);
+  if(len>1.25){
+   const vx=dx/len*z.speed*dt,vz=dz/len*z.speed*dt;
+   const oldX=z.mesh.position.x,oldZ=z.mesh.position.z;
+   moveWithCollision(z.mesh,vx,vz,.48);
+   if(Math.abs(z.mesh.position.x-oldX)+Math.abs(z.mesh.position.z-oldZ)<.001){
+    moveWithCollision(z.mesh,vz,-vx,.48);
+    if(Math.abs(z.mesh.position.x-oldX)+Math.abs(z.mesh.position.z-oldZ)<.001)
+     moveWithCollision(z.mesh,-vz,vx,.48);
    }
-  }
- });
-
- // Зомби обходят здания
- for(const z of [...zombies]){
-  const p=z.group.position,d=Math.hypot(p.x,p.z);
-  if(d>5.3){
-   const v=zombieDirection(z);
-   moveWithCollision(z.group,v.x*z.speed*dt,v.z*z.speed*dt,.6);
-   if(v.x||v.z)z.group.lookAt(p.x+v.x,0,p.z+v.z);
-   animatePerson(z.group,t,true);
+   z.mesh.rotation.y=Math.atan2(-dx,-dz);
   }else{
    z.attack-=dt;
-   if(z.attack<=0){
-    baseHealth-=2.5;z.attack=.7;updateUI();
-    if(baseHealth<=0){baseHealth=0;updateUI();gameOver();}
-   }
-  }
- }
-
- // Пули
- for(const b of [...bullets]){
-  b.mesh.position.add(b.dir.clone().multiplyScalar(26*dt));b.life-=dt;
-  let hit=null;
-  for(const z of zombies){
-   if(b.mesh.position.distanceTo(z.group.position.clone().add(new THREE.Vector3(0,1,0)))<.85){hit=z;break;}
-  }
-  if(hit){
-   hit.hp-=b.power;scene.remove(b.mesh);bullets=bullets.filter(v=>v!==b);
-   if(hit.hp<=0)kill(hit);
-  }else if(b.life<=0){
-   scene.remove(b.mesh);bullets=bullets.filter(v=>v!==b);
-  }
- }
-
- // Волны зомби
- if(spawnLeft>0){
-  spawnTimer-=dt;
-  if(spawnTimer<=0){
-   const a=Math.random()*Math.PI*2,r=39+Math.random()*3;
-   zombie(Math.cos(a)*r,Math.sin(a)*r);
-   spawnLeft--;spawnTimer=Math.max(.6,1.6-wave*.03);
-  }
- }else if(zombies.length===0){
-  nextWave+=dt;
-  if(nextWave>7){
-   wave++;spawnLeft=5+wave*2;nextWave=0;
-   toast('ВОЛНА '+wave);updateUI();
-  }
- }
-
- // Поиск площадки для покупки
- nearby=null;let best=4.4;
- buildings.forEach(b=>{
-  if(!b.built){
-   const d=Math.hypot(player.position.x-b.x,player.position.z-b.z);
-   if(d<best){best=d;nearby=b;}
+   if(z.attack<=0){baseHealth=Math.max(0,baseHealth-2);z.attack=.7;updateUI()}
   }
  });
- const hint=document.getElementById('buyhint');
- if(nearby){
-  hint.style.display='block';
-  document.getElementById('buyText').textContent='🪙 '+nearby.cost+' · НАЖМИ';
- }else hint.style.display='none';
-}
 
-function loop(){
- requestAnimationFrame(loop);
- const dt=Math.min(clock.getDelta(),.04);
- update(dt,clock.elapsedTime);
+ // Player and soldier shooting
+ lastShot-=dt;
+ if(lastShot<=0&&zombies.length){
+  let target=null,best=18;
+  zombies.forEach(z=>{
+   const d=Math.hypot(z.mesh.position.x-player.position.x,z.mesh.position.z-player.position.z);
+   if(d<best){best=d;target=z}
+  });
+  if(target){shoot(player.position,target);lastShot=.48}
+ }
+ soldiers.forEach((s,i)=>{
+  if(Math.random()<dt*.8&&zombies.length){
+   let target=null,best=16;
+   zombies.forEach(z=>{
+    const d=Math.hypot(z.mesh.position.x-s.mesh.position.x,z.mesh.position.z-s.mesh.position.z);
+    if(d<best){best=d;target=z}
+   });
+   if(target)shoot(s.mesh.position,target);
+  }
+ });
+
+ // Bullet movement and hits
+ for(let i=bullets.length-1;i>=0;i--){
+  const b=bullets[i];
+  b.mesh.position.addScaledVector(b.dir,18*dt);b.life-=dt;
+  let hit=false;
+  for(let j=zombies.length-1;j>=0;j--){
+   const z=zombies[j];
+   if(b.mesh.position.distanceTo(new THREE.Vector3(z.mesh.position.x,1.5,z.mesh.position.z))<.85){
+    z.hp--;hit=true;
+    if(z.hp<=0){
+     scene.remove(z.mesh);zombies.splice(j,1);kills++;coins+=15;updateUI();
+    }
+    break;
+   }
+  }
+  if(hit||b.life<=0){scene.remove(b.mesh);bullets.splice(i,1)}
+ }
+
+ // New waves
+ spawnTimer+=dt;
+ if(zombies.length===0&&spawnTimer>5){spawnTimer=0;spawnWave()}
+ buildNearby();
+
+ if(baseHealth<=0){$("gameover").style.display="flex"}
  renderer.render(scene,camera);
 }
 updateUI();
-camera.position.set(0,34,30);
-camera.lookAt(0,0,10);
-loop();
+requestAnimationFrame(animate);
 
-addEventListener('resize',()=>{
- camera.aspect=innerWidth/innerHeight;
- camera.updateProjectionMatrix();
+addEventListener("resize",()=>{
+ camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();
  renderer.setSize(innerWidth,innerHeight);
 });
 })();
