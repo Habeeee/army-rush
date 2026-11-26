@@ -7,29 +7,34 @@
 <title>Last Defense</title>
 <style>
 *{box-sizing:border-box}
-html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#263326;font-family:Arial,sans-serif;touch-action:none}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#806b4b;font-family:Arial,sans-serif;touch-action:none}
 canvas{display:block}
 #ui{position:fixed;inset:0;pointer-events:none;color:white}
-.panel{background:#101b1de8;border:1px solid #ffffff20;border-radius:12px;padding:9px 12px}
-.top{position:absolute;top:10px;left:10px;right:10px;display:flex;justify-content:space-between;gap:7px}
+.panel{background:#101b1de8;border:1px solid #ffffff25;border-radius:12px;padding:9px 11px}
+.top{position:absolute;top:10px;left:10px;right:10px;display:flex;justify-content:space-between;gap:6px}
 .stat{font-size:10px;color:#aab8b4;letter-spacing:1px}
-.value{font-size:18px;font-weight:800;margin-top:4px}
-#health{position:absolute;top:70px;left:10px;width:175px}
+.value{font-size:17px;font-weight:800;margin-top:4px}
+#health{position:absolute;top:69px;left:10px;width:175px}
 .bar{height:7px;background:#34423e;border-radius:8px;margin-top:7px;overflow:hidden}
 #healthFill{height:100%;width:100%;background:#50d38a}
-#waveBox{position:absolute;right:10px;top:70px}
-#objective{position:absolute;top:126px;left:12px;font-size:11px;text-shadow:0 2px 5px #000}
-#buttons{position:absolute;left:10px;bottom:18px;display:flex;gap:7px;pointer-events:auto}
-.action{background:#111e20ed;border:1px solid #ffffff25;color:white;border-radius:11px;padding:10px 9px;font-size:10px;font-weight:bold}
-.action strong{display:block;font-size:14px;margin-top:4px}
-#joystick{position:absolute;width:126px;height:126px;left:50%;bottom:18px;transform:translateX(-50%);border-radius:50%;background:#dce8e326;border:2px solid #ffffff55;pointer-events:auto;touch-action:none}
-#stick{position:absolute;width:52px;height:52px;left:35px;top:35px;border-radius:50%;background:#dce8e3a8;border:2px solid #fff9;box-shadow:0 3px 12px #0007}
-#buyhint{position:absolute;left:50%;bottom:160px;transform:translateX(-50%);display:none;background:#101b1df2;border:1px solid #e7b84d;border-radius:12px;padding:10px 15px;text-align:center;font-size:12px;white-space:nowrap;pointer-events:auto}
+#waveBox{position:absolute;right:10px;top:69px}
+#objective{position:absolute;top:125px;left:12px;font-size:11px;text-shadow:0 2px 5px #000}
+#buttons{position:absolute;left:10px;bottom:18px;display:flex;flex-direction:column;gap:8px;pointer-events:auto}
+.action{width:100px;min-height:49px;background:#111e20ed;border:1px solid #ffffff35;color:white;border-radius:11px;padding:7px;font-size:10px;font-weight:bold;text-align:center}
+.action strong{display:block;font-size:14px;margin-top:3px}
+#joystick{position:absolute;width:120px;height:120px;left:50%;bottom:18px;transform:translateX(-50%);border-radius:50%;background:#dce8e326;border:2px solid #ffffff55;pointer-events:auto;touch-action:none}
+#stick{position:absolute;width:50px;height:50px;left:33px;top:33px;border-radius:50%;background:#dce8e3a8;border:2px solid #fff9;box-shadow:0 3px 12px #0007}
+#buyhint{position:absolute;left:50%;bottom:155px;transform:translateX(-50%);display:none;background:#101b1df2;border:1px solid #e7b84d;border-radius:12px;padding:10px 15px;text-align:center;font-size:12px;white-space:nowrap;pointer-events:auto}
 #buyhint strong{display:block;color:#f5ca65;margin-top:4px;font-size:14px}
 #toast{position:absolute;top:43%;left:50%;transform:translate(-50%,-50%);background:#101b1df2;padding:12px 18px;border-radius:12px;opacity:0;transition:opacity .2s;font-size:13px}
 #gameover{display:none;position:absolute;inset:0;background:#07100eef;align-items:center;justify-content:center;flex-direction:column;pointer-events:auto}
 #gameover button{padding:14px 25px;border:0;border-radius:10px;background:#e5b94e;font-weight:bold}
-@media(max-width:380px){#joystick{width:112px;height:112px}#stick{left:30px;top:30px;width:48px;height:48px}}
+@media(max-width:380px){
+ #joystick{width:108px;height:108px}
+ #stick{left:29px;top:29px;width:46px;height:46px}
+ #buttons{left:7px;bottom:12px}
+ .action{width:88px;min-height:45px}
+}
 </style>
 </head>
 <body>
@@ -43,43 +48,42 @@ canvas{display:block}
  <div id="waveBox" class="panel"><div class="stat">ВОЛНА</div><div class="value" id="wave">1</div></div>
  <div id="objective">Защищай территорию и развивай базу</div>
  <div id="buttons">
-  <button class="action" id="recruit">СОЛДАТ<strong>🪖 100</strong></button>
-  <button class="action" id="repair">РЕМОНТ<strong>🛠 75</strong></button>
+  <button class="action" id="recruit">НАНЯТЬ СОЛДАТ<strong>🪖 100</strong></button>
+  <button class="action" id="repair">РЕМОНТ БАЗЫ<strong>🛠 75</strong></button>
  </div>
  <div id="joystick"><div id="stick"></div></div>
  <div id="buyhint">ПОСТРОИТЬ ЗДАНИЕ<strong id="buyText">🪙 200</strong></div>
  <div id="toast"></div>
  <div id="gameover"><h1>БАЗА УНИЧТОЖЕНА</h1><p>Твоя оборона пала</p><button onclick="location.reload()">ИГРАТЬ СНОВА</button></div>
 </div>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 (()=>{
 const scene=new THREE.Scene();
-scene.background=new THREE.Color(0x89927b);
-scene.fog=new THREE.Fog(0x89927b,65,115);
+scene.background=new THREE.Color(0x8b947d);
+scene.fog=new THREE.Fog(0x8b947d,70,125);
 const camera=new THREE.PerspectiveCamera(48,innerWidth/innerHeight,.1,180);
 const renderer=new THREE.WebGLRenderer({antialias:true});
 renderer.setSize(innerWidth,innerHeight);
 renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));
 renderer.shadowMap.enabled=true;
-renderer.shadowMap.type=THREE.PCFSoftShadowMap;
 document.body.appendChild(renderer.domElement);
 scene.add(new THREE.HemisphereLight(0xe8f0df,0x56513c,2));
 const sun=new THREE.DirectionalLight(0xffedcf,2);
 sun.position.set(-25,45,20);sun.castShadow=true;
-sun.shadow.mapSize.set(1024,1024);
-scene.add(sun);
+sun.shadow.mapSize.set(1024,1024);scene.add(sun);
 
-const material=(c)=>new THREE.MeshStandardMaterial({color:c,roughness:.95});
+const mat=c=>new THREE.MeshStandardMaterial({color:c,roughness:.95});
 const M={
-earth:material(0x806b4b),earth2:material(0x907957),grass:material(0x627d49),
-grass2:material(0x4e693c),grass3:material(0x829052),road:material(0x9b896b),
-concrete:material(0x777e79),blue:material(0x354f62),blue2:material(0x526d7d),
-skin:material(0xc69a78),uniform:material(0x4c6049),vest:material(0x34463a),
-pants:material(0x394a3a),boots:material(0x252c29),metal:material(0x343c3e),
-helmet:material(0x344b3c),gun:material(0x20282a),zskin:material(0x87947b),
-zcloth:material(0x4b5145),blood:material(0x552d2a),yellow:material(0xe5b74e),
-wood:material(0x76563b),white:material(0xd8d8c8)
+earth:mat(0x806343),earthLight:mat(0x927650),earthDark:mat(0x6e563a),
+grass:mat(0x527c38),grass2:mat(0x426b30),grass3:mat(0x739448),
+road:mat(0xa18a68),concrete:mat(0x777e79),blue:mat(0x354f62),
+blue2:mat(0x526d7d),skin:mat(0xc69a78),uniform:mat(0x4c6049),
+vest:mat(0x34463a),pants:mat(0x394a3a),boots:mat(0x252c29),
+metal:mat(0x343c3e),helmet:mat(0x344b3c),gun:mat(0x20282a),
+zskin:mat(0x87947b),zcloth:mat(0x4b5145),blood:mat(0x552d2a),
+yellow:mat(0xe5b74e),wood:mat(0x76563b),white:mat(0xd8d8c8)
 };
 function box(p,w,h,d,m,x,y,z){
  const o=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),m);
@@ -93,58 +97,63 @@ function cyl(p,rt,rb,h,m,x,y,z,n=10){
  const o=new THREE.Mesh(new THREE.CylinderGeometry(rt,rb,h,n),m);
  o.position.set(x,y,z);o.castShadow=true;p.add(o);return o;
 }
+
+// ЗЕМЛЯ И ТЕРРИТОРИЯ
 function makeGround(){
+ // Основная поверхность — земля коричневого цвета
  const ground=new THREE.Mesh(new THREE.PlaneGeometry(180,180),M.earth);
- ground.rotation.x=-Math.PI/2;ground.position.y=-.12;ground.receiveShadow=true;scene.add(ground);
- // Большая открытая земляная территория базы
- const area=new THREE.Mesh(new THREE.CircleGeometry(45,80),M.earth2);
- area.rotation.x=-Math.PI/2;area.position.y=-.105;scene.add(area);
- // Неровные пятна земли и травы
- for(let i=0;i<380;i++){
+ ground.rotation.x=-Math.PI/2;ground.position.y=-.14;ground.receiveShadow=true;scene.add(ground);
+
+ // Центральная территория базы — более светлая утрамбованная земля
+ const area=new THREE.Mesh(new THREE.CircleGeometry(45,80),M.earthLight);
+ area.rotation.x=-Math.PI/2;area.position.y=-.12;scene.add(area);
+
+ // Отдельные земляные пятна
+ for(let i=0;i<280;i++){
   const a=Math.random()*Math.PI*2,r=Math.sqrt(Math.random())*43;
   const x=Math.cos(a)*r,z=Math.sin(a)*r;
-  const patch=new THREE.Mesh(new THREE.CircleGeometry(.25+Math.random()*.9,7),Math.random()>.5?M.earth:M.grass);
-  patch.rotation.x=-Math.PI/2;patch.position.set(x,-.09,z);scene.add(patch);
+  const patch=new THREE.Mesh(new THREE.CircleGeometry(.3+Math.random()*.9,7),
+    Math.random()>.5?M.earth:M.earthDark);
+  patch.rotation.x=-Math.PI/2;patch.position.set(x,-.105,z);scene.add(patch);
  }
- // Дорожки внутри территории
+
+ // Дороги
  const road=new THREE.Mesh(new THREE.PlaneGeometry(8,82),M.road);
  road.rotation.x=-Math.PI/2;road.position.set(0,-.075,-3);scene.add(road);
  const cross=new THREE.Mesh(new THREE.PlaneGeometry(65,5),M.road);
  cross.rotation.x=-Math.PI/2;cross.position.set(0,-.07,-5);scene.add(cross);
 
- // Густая объёмная трава — отдельные инстансированные стебли
+ // Трава — только зелёные пучки, отдельные от земли
  const geo=new THREE.ConeGeometry(.055,.48,3);
  geo.translate(0,.24,0);
- const grassMats=[M.grass,M.grass2,M.grass3];
- const count=2600;
- const inst=grassMats.map(m=>new THREE.InstancedMesh(geo,m,count));
- const dummy=new THREE.Object3D(),counts=[0,0,0];
+ const groups=[M.grass,M.grass2,M.grass3];
+ const count=3000,instances=groups.map(m=>new THREE.InstancedMesh(geo,m,count));
+ const counts=[0,0,0],dummy=new THREE.Object3D();
  for(let i=0;i<count;i++){
   const x=(Math.random()-.5)*86,z=(Math.random()-.5)*86;
-  // Оставляем свободные дорожки и пространство около центра базы
+  if(Math.hypot(x,z)>43)continue;
+  // Свободные дорожки и площадка вокруг базы
   if(Math.abs(x)<5&&z<8&&z>-45)continue;
   if(Math.abs(z+5)<3&&Math.abs(x)<34)continue;
-  const r=Math.hypot(x,z);
-  if(r>43)continue;
   const k=Math.floor(Math.random()*3),j=counts[k]++;
-  dummy.position.set(x,-.08,z);
-  dummy.rotation.set((Math.random()-.5)*.18,Math.random()*6.28,(Math.random()-.5)*.18);
-  const s=.65+Math.random()*1.2;dummy.scale.set(s,s,s);
-  dummy.updateMatrix();inst[k].setMatrixAt(j,dummy.matrix);
+  dummy.position.set(x,-.09,z);
+  dummy.rotation.set((Math.random()-.5)*.15,Math.random()*6.28,(Math.random()-.5)*.15);
+  const s=.7+Math.random()*1.1;dummy.scale.set(s,s,s);
+  dummy.updateMatrix();instances[k].setMatrixAt(j,dummy.matrix);
  }
- inst.forEach((o,i)=>{o.count=counts[i];o.instanceMatrix.needsUpdate=true;scene.add(o)});
+ instances.forEach((o,i)=>{o.count=counts[i];o.instanceMatrix.needsUpdate=true;scene.add(o)});
 
- // Лес только за пределами нашей территории
- for(let i=0;i<95;i++){
-  const a=Math.random()*Math.PI*2,r=51+Math.random()*23;
+ // Лес — только за пределами территории
+ for(let i=0;i<100;i++){
+  const a=Math.random()*Math.PI*2,r=52+Math.random()*23;
   const x=Math.cos(a)*r,z=Math.sin(a)*r;
   cyl(scene,.15,.23,1.4,M.wood,x,.7,z,7);
-  sphere(scene,x,2.1,z,1.1,1.5,1.1,material(0x405c3e));
+  sphere(scene,x,2.1,z,1.1,1.5,1.1,mat(0x405c3e));
  }
 }
 makeGround();
 
-// База
+// БАЗА
 const base=new THREE.Group();scene.add(base);
 box(base,8,.6,7,M.concrete,0,.3,0);
 box(base,6,2.7,5,M.blue,0,1.9,0);
@@ -153,7 +162,7 @@ box(base,2.2,1.5,1.5,M.concrete,0,4.1,-.6);
 box(base,1.3,.4,1.3,M.metal,0,5,-.6);
 box(base,2.5,1.1,.15,M.metal,0,1.4,2.57);
 
-// Персонажи с человеческими пропорциями
+// ЧЕЛОВЕЧЕСКИЕ МОДЕЛИ
 function human(zombie=false){
  const root=new THREE.Group(),body=new THREE.Group();root.add(body);
  const skin=zombie?M.zskin:M.skin,shirt=zombie?M.zcloth:M.uniform,pants=zombie?M.zcloth:M.pants;
@@ -183,14 +192,12 @@ function human(zombie=false){
   const arm=new THREE.Group();arm.position.set(s*.37,1.43,0);body.add(arm);
   cyl(arm,.09,.13,.43,shirt,0,-.21,0);
   cyl(arm,.065,.095,.37,skin,0,-.6,.01);
-  sphere(arm,0,-.78,.02,.08,.09,.08,skin);
-  arms.push(arm);
+  sphere(arm,0,-.78,.02,.08,.09,.08,skin);arms.push(arm);
   const leg=new THREE.Group();leg.position.set(s*.17,.72,0);body.add(leg);
   cyl(leg,.13,.16,.42,pants,0,-.21,0);
   sphere(leg,0,-.4,0,.105,.11,.105,pants);
   cyl(leg,.075,.105,.43,pants,0,-.64,0);
-  box(leg,.16,.13,.31,M.boots,0,-.88,.075);
-  legs.push(leg);
+  box(leg,.16,.13,.31,M.boots,0,-.88,.075);legs.push(leg);
  }
  if(!zombie){
   const rifle=new THREE.Group();body.add(rifle);
@@ -210,26 +217,44 @@ function animatePerson(g,t,walking){
 
 let coins=150,kills=0,wave=1,baseHealth=100,damage=1,ended=false;
 let zombies=[],soldiers=[],bullets=[],buildings=[];
+let nearby=null,spawnLeft=0,spawnTimer=0,nextWave=0;
 const player=new THREE.Group();scene.add(player);
 const playerModel=human(false);player.add(playerModel);
-const playerData={group:playerModel,shoot:0};
-const clock=new THREE.Clock();
-let joy={x:0,y:0,active:false,id:null},nearby=null;
-let spawnLeft=0,spawnTimer=0,nextWave=0;
+const playerData={shoot:0};
 
-function soldier(x,z){
- const g=human(false);g.position.set(x,0,z);scene.add(g);
- const s={group:g,shoot:Math.random()};soldiers.push(s);updateUI();return s;
+// Препятствия: главная база и незакупленные здания тоже блокируют путь
+const obstacles=[
+ {x:0,z:0,r:5.0},
+ {x:-12,z:1,r:2.8},{x:12,z:-2,r:2.1},
+ {x:-12,z:-13,r:2.7},{x:12,z:-14,r:2.7}
+];
+function collides(x,z,r){
+ for(const o of obstacles){
+  if(Math.hypot(x-o.x,z-o.z)<r+o.r)return true;
+ }
+ return false;
 }
-function zombie(x,z){
- const g=human(true);g.position.set(x,0,z);scene.add(g);
- zombies.push({group:g,hp:2+Math.floor(wave*.35),speed:1.05+Math.random()*.25,attack:0});
+function moveWithCollision(obj,dx,dz,r){
+ const nx=obj.position.x+dx,nz=obj.position.z+dz;
+ // Проверяем каждую ось отдельно, чтобы можно было скользить вдоль стен
+ if(!collides(nx,obj.position.z,r))obj.position.x=nx;
+ if(!collides(obj.position.x,nz,r))obj.position.z=nz;
 }
+
+// ВАЖНО: игрок появляется на открытом поле, далеко от базы и построек
+player.position.set(0,0,13);
+if(collides(player.position.x,player.position.z,.65)){
+ player.position.set(7,0,13);
+}
+
+// ПОСТРОЙКИ
 function label(text){
  const c=document.createElement('canvas');c.width=256;c.height=96;
- const ctx=c.getContext('2d');ctx.fillStyle='#111d1dee';ctx.fillRect(4,4,248,88);
+ const ctx=c.getContext('2d');
+ ctx.fillStyle='#111d1dee';ctx.fillRect(4,4,248,88);
  ctx.strokeStyle='#e5bd59';ctx.lineWidth=5;ctx.strokeRect(5,5,246,86);
- ctx.fillStyle='#f5cf6c';ctx.font='bold 32px Arial';ctx.textAlign='center';ctx.fillText(text,128,57);
+ ctx.fillStyle='#f5cf6c';ctx.font='bold 32px Arial';ctx.textAlign='center';
+ ctx.fillText(text,128,57);
  const s=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(c),transparent:true}));
  s.scale.set(3.3,1.25,1);return s;
 }
@@ -256,52 +281,16 @@ building('БАШНЯ',12,-2,250);
 building('АРСЕНАЛ',-12,-13,300);
 building('ГОСПИТАЛЬ',12,-14,275);
 
-// Препятствия. Радиус учитывает габариты каждого здания.
-const obstacles=[
- {x:0,z:0,r:5.0},
- {x:-12,z:1,r:2.8},{x:12,z:-2,r:2.1},
- {x:-12,z:-13,r:2.7},{x:12,z:-14,r:2.7}
-];
-function collides(x,z,r){
- for(const o of obstacles)if(Math.hypot(x-o.x,z-o.z)<r+o.r)return true;
- return false;
+function soldier(x,z){
+ const g=human(false);g.position.set(x,0,z);scene.add(g);
+ const s={group:g,shoot:Math.random()};soldiers.push(s);updateUI();return s;
 }
-function moveWithCollision(obj,dx,dz,r){
- const nx=obj.position.x+dx,nz=obj.position.z+dz;
- if(!collides(nx,obj.position.z,r))obj.position.x=nx;
- if(!collides(obj.position.x,nz,r))obj.position.z=nz;
+function zombie(x,z){
+ const g=human(true);g.position.set(x,0,z);
+ zombies.push({group:g,hp:2+Math.floor(wave*.35),speed:1.05+Math.random()*.25,attack:0});
 }
-// Зомби ищут свободный путь, не проходят сквозь здания
-function zombieDirection(z){
- const p=z.group.position;
- let dx=-p.x,dz=-p.z,len=Math.hypot(dx,dz)||1;dx/=len;dz/=len;
- let tx=p.x+dx*2,tz=p.z+dz*2;
- if(collides(tx,tz,.65)){
-  const options=[[ -dz,dx],[dz,-dx],[dx,-dz],[-dx,dz]];
-  let found=false;
-  for(const v of options){
-   if(!collides(p.x+v[0]*2,p.z+v[1]*2,.65)){dx=v[0];dz=v[1];found=true;break;}
-  }
-  if(!found){dx=0;dz=0;}
- }
- return {x:dx,z:dz};
-}
-function shoot(from,to,power){
- const dir=new THREE.Vector3().subVectors(to,from).normalize();
- const mesh=new THREE.Mesh(new THREE.SphereGeometry(.085,8,8),M.yellow);
- mesh.position.copy(from);scene.add(mesh);bullets.push({mesh,dir,life:2,power});
-}
-function nearest(pos,max){
- let best=null,dmax=max;
- for(const z of zombies){const d=pos.distanceTo(z.group.position);if(d<dmax){best=z;dmax=d;}}
- return best;
-}
-function kill(z){
- scene.remove(z.group);zombies=zombies.filter(a=>a!==z);
- kills++;coins+=12;if(Math.random()<.13)coins+=10;updateUI();
-}
-function toast(s){
- const el=document.getElementById('toast');el.textContent=s;el.style.opacity=1;
+function toast(msg){
+ const el=document.getElementById('toast');el.textContent=msg;el.style.opacity=1;
  clearTimeout(toast.timer);toast.timer=setTimeout(()=>el.style.opacity=0,1500);
 }
 function updateUI(){
@@ -315,7 +304,8 @@ function updateUI(){
 function construct(b){
  b.built=true;b.ghost.visible=false;b.tag.visible=false;
  if(b.type==='КАЗАРМЫ'){
-  box(b.g,4,2.4,3,M.blue,0,1.2,0);box(b.g,4.2,.2,3.2,M.blue2,0,2.45,0);
+  box(b.g,4,2.4,3,M.blue,0,1.2,0);
+  box(b.g,4.2,.2,3.2,M.blue2,0,2.45,0);
   for(let i=0;i<3;i++)soldier(-1+i,5);
   toast('Казармы построены! +3 солдата');
  }else if(b.type==='БАШНЯ'){
@@ -346,41 +336,79 @@ document.getElementById('repair').onclick=()=>{
  if(baseHealth>=100)return toast('База уже здорова');
  coins-=75;baseHealth=Math.min(100,baseHealth+25);updateUI();
 };
+
+function shoot(from,to,power){
+ const dir=new THREE.Vector3().subVectors(to,from).normalize();
+ const mesh=new THREE.Mesh(new THREE.SphereGeometry(.085,8,8),M.yellow);
+ mesh.position.copy(from);scene.add(mesh);bullets.push({mesh,dir,life:2,power});
+}
+function nearest(pos,max){
+ let best=null,dmax=max;
+ for(const z of zombies){
+  const d=pos.distanceTo(z.group.position);
+  if(d<dmax){best=z;dmax=d;}
+ }
+ return best;
+}
+function kill(z){
+ scene.remove(z.group);zombies=zombies.filter(a=>a!==z);
+ kills++;coins+=12;if(Math.random()<.13)coins+=10;updateUI();
+}
+function zombieDirection(z){
+ const p=z.group.position;
+ let dx=-p.x,dz=-p.z,len=Math.hypot(dx,dz)||1;dx/=len;dz/=len;
+ if(collides(p.x+dx*2,p.z+dz*2,.6)){
+  const options=[[-dz,dx],[dz,-dx],[dx,-dz],[-dx,dz]];
+  let found=false;
+  for(const v of options){
+   if(!collides(p.x+v[0]*2,p.z+v[1]*2,.6)){dx=v[0];dz=v[1];found=true;break;}
+  }
+  if(!found){dx=0;dz=0;}
+ }
+ return {x:dx,z:dz};
+}
 function gameOver(){
  ended=true;document.getElementById('gameover').style.display='flex';
 }
 
-// Джойстик — снизу ровно по центру
+// ДЖОЙСТИК — СТРОГО СНИЗУ ПО ЦЕНТРУ
 const joyEl=document.getElementById('joystick'),stick=document.getElementById('stick');
+let joy={x:0,y:0,active:false,id:null};
 function setJoy(e){
  const r=joyEl.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;
  let x=e.clientX-cx,y=e.clientY-cy,max=r.width*.34,l=Math.hypot(x,y);
  if(l>max){x=x/l*max;y=y/l*max;}
- joy.x=x/max;joy.y=y/max;stick.style.transform=`translate(${x}px,${y}px)`;
+ joy.x=x/max;joy.y=y/max;
+ stick.style.transform=`translate(${x}px,${y}px)`;
 }
 joyEl.addEventListener('pointerdown',e=>{
- e.preventDefault();joy.active=true;joy.id=e.pointerId;joyEl.setPointerCapture(e.pointerId);setJoy(e);
+ e.preventDefault();joy.active=true;joy.id=e.pointerId;
+ joyEl.setPointerCapture(e.pointerId);setJoy(e);
 });
-joyEl.addEventListener('pointermove',e=>{if(joy.active&&joy.id===e.pointerId)setJoy(e);});
+joyEl.addEventListener('pointermove',e=>{
+ if(joy.active&&joy.id===e.pointerId)setJoy(e);
+});
 function release(e){
  if(e.pointerId!==joy.id)return;
- joy.active=false;joy.x=0;joy.y=0;joy.id=null;stick.style.transform='translate(0,0)';
+ joy.active=false;joy.x=0;joy.y=0;joy.id=null;
+ stick.style.transform='translate(0,0)';
 }
 joyEl.addEventListener('pointerup',release);
 joyEl.addEventListener('pointercancel',release);
 
+const clock=new THREE.Clock();
 function update(dt,t){
  if(ended)return;
- // Игрок
+ // Движение игрока с проверкой препятствий
  const moving=Math.hypot(joy.x,joy.y)>.08;
  if(moving){
   const l=Math.hypot(joy.x,joy.y),dx=joy.x/l,dz=joy.y/l;
-  moveWithCollision(player,dx*7*dt,dz*7*dt,.55);
+  moveWithCollision(player,dx*7*dt,dz*7*dt,.6);
   playerModel.rotation.y=Math.atan2(dx,dz);
  }
  animatePerson(playerModel,t,moving);
 
- // Камера
+ // Камера следует за игроком
  camera.position.lerp(new THREE.Vector3(player.position.x,34,player.position.z+17),.09);
  camera.lookAt(player.position.x,0,player.position.z-2);
 
@@ -390,47 +418,54 @@ function update(dt,t){
   const tx=player.position.x+Math.cos(a)*2.4,tz=player.position.z+Math.sin(a)*2.4+1;
   let dx=tx-s.group.position.x,dz=tz-s.group.position.z;
   const len=Math.hypot(dx,dz),walking=len>.5;
-  if(walking){dx/=len;dz/=len;moveWithCollision(s.group,dx*4*dt,dz*4*dt,.45);}
+  if(walking){
+   dx/=len;dz/=len;
+   moveWithCollision(s.group,dx*4*dt,dz*4*dt,.45);
+  }
   const target=nearest(s.group.position,24);
   if(target){
    s.group.lookAt(target.group.position.x,0,target.group.position.z);
    s.shoot-=dt;
    if(s.shoot<=0){
     shoot(s.group.position.clone().add(new THREE.Vector3(0,1.4,0)),
-     target.group.position.clone().add(new THREE.Vector3(0,1,0)),damage);
+    target.group.position.clone().add(new THREE.Vector3(0,1,0)),damage);
     s.shoot=.85;
    }
   }
   animatePerson(s.group,t,walking);
  });
- // Автострельба игрока
+
+ // Автоматическая стрельба игрока
  const target=nearest(player.position,30);
  if(target){
   playerData.shoot-=dt;
   if(playerData.shoot<=0){
    shoot(player.position.clone().add(new THREE.Vector3(0,1.4,0)),
-    target.group.position.clone().add(new THREE.Vector3(0,1,0)),damage);
+   target.group.position.clone().add(new THREE.Vector3(0,1,0)),damage);
    playerData.shoot=.5;
   }
  }
+
  // Башни
  buildings.forEach(b=>{
   if(b.built&&b.type==='БАШНЯ'){
-   b.cool=(b.cool||0)-dt;const z=nearest(b.g.position,27);
+   b.cool=(b.cool||0)-dt;
+   const z=nearest(b.g.position,27);
    if(z&&b.cool<=0){
     shoot(b.g.position.clone().add(new THREE.Vector3(0,3.5,0)),
-     z.group.position.clone().add(new THREE.Vector3(0,1,0)),damage+1);
+    z.group.position.clone().add(new THREE.Vector3(0,1,0)),damage+1);
     b.cool=1;
    }
   }
  });
- // Зомби обходят здания и атакуют базу
+
+ // Зомби обходят здания
  for(const z of [...zombies]){
   const p=z.group.position,d=Math.hypot(p.x,p.z);
   if(d>5.3){
    const v=zombieDirection(z);
-   moveWithCollision(z.group,v.x*z.speed*dt,v.z*z.speed*dt,.55);
-   z.group.lookAt(p.x+v.x,0,p.z+v.z);
+   moveWithCollision(z.group,v.x*z.speed*dt,v.z*z.speed*dt,.6);
+   if(v.x||v.z)z.group.lookAt(p.x+v.x,0,p.z+v.z);
    animatePerson(z.group,t,true);
   }else{
    z.attack-=dt;
@@ -440,6 +475,7 @@ function update(dt,t){
    }
   }
  }
+
  // Пули
  for(const b of [...bullets]){
   b.mesh.position.add(b.dir.clone().multiplyScalar(26*dt));b.life-=dt;
@@ -454,7 +490,8 @@ function update(dt,t){
    scene.remove(b.mesh);bullets=bullets.filter(v=>v!==b);
   }
  }
- // Волны
+
+ // Волны зомби
  if(spawnLeft>0){
   spawnTimer-=dt;
   if(spawnTimer<=0){
@@ -465,10 +502,12 @@ function update(dt,t){
  }else if(zombies.length===0){
   nextWave+=dt;
   if(nextWave>7){
-   wave++;spawnLeft=5+wave*2;nextWave=0;toast('ВОЛНА '+wave);updateUI();
+   wave++;spawnLeft=5+wave*2;nextWave=0;
+   toast('ВОЛНА '+wave);updateUI();
   }
  }
- // Покупка зданий при приближении
+
+ // Поиск площадки для покупки
  nearby=null;let best=4.4;
  buildings.forEach(b=>{
   if(!b.built){
@@ -482,15 +521,21 @@ function update(dt,t){
   document.getElementById('buyText').textContent='🪙 '+nearby.cost+' · НАЖМИ';
  }else hint.style.display='none';
 }
+
 function loop(){
  requestAnimationFrame(loop);
  const dt=Math.min(clock.getDelta(),.04);
  update(dt,clock.elapsedTime);
  renderer.render(scene,camera);
 }
-updateUI();camera.position.set(0,34,25);camera.lookAt(0,0,0);loop();
+updateUI();
+camera.position.set(0,34,30);
+camera.lookAt(0,0,10);
+loop();
+
 addEventListener('resize',()=>{
- camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();
+ camera.aspect=innerWidth/innerHeight;
+ camera.updateProjectionMatrix();
  renderer.setSize(innerWidth,innerHeight);
 });
 })();
